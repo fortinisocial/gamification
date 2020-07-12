@@ -14,7 +14,7 @@ Promover a obtenção de conhecimento e de experiências valorosas e ao mesmo te
 
 Pontos serão distribuídos entre categorias predefinidas que serão representadas no nosso Trello através de etiquetas.
 
-Os pontossão computados automaticamente quando os cards são concluídos.
+Os pontos são computados automaticamente quando os cards são concluídos.
 
 ### Stack
 
