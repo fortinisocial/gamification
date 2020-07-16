@@ -11,9 +11,24 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 50px;
+  padding: 48px;
+
+  @media only screen and (max-width: 420px) {
+    padding: 24px;
+  }
 
   header {
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100px;
+    padding: 0 24px;
+    border-radius: 4px;
+    color: #444;
+    box-shadow: rgba(67, 66, 93, 0.03) 0px -2px 3px,
+      rgba(67, 66, 93, 0.09) 0px 2px 3px;
     margin-bottom: 50px;
   }
 
@@ -48,7 +63,19 @@ const Container = styled.div`
   }
 `;
 
+const LabelsContainer = styled.div`
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+`;
+
 const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
   position: relative;
   color: #fff;
   background-color: ${({ color }) => color};
@@ -56,32 +83,60 @@ const Label = styled.label`
   text-shadow: none;
   white-space: nowrap;
   width: auto;
-  height: 16px;
+  height: 48px;
   line-height: 16px;
   min-width: 40px;
   max-width: 198px;
-  padding: 0 10px;
   border-radius: 4px;
-  padding-bottom: 22px;
+  padding: 4px 6px;
+  text-shadow: 1px 0px 4px rgba(0, 0, 0, 0.3);
 
   & + label {
     margin-left: 5px;
   }
 
+  @media only screen and (max-width: 768px) {
+    & + label {
+      margin: 0 0 5px 5px;
+    }
+  }
+
   span {
-    position: absolute;
-    bottom: 0px;
     width: auto;
     font-size: 12px;
     font-weight: 600;
     color: #232323;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
+    line-height: 22px;
+    text-shadow: none;
+  }
+`;
+
+const LabelSkeleton = styled.label`
+  background: linear-gradient(-90deg, #f6fbff 0%, #ecf1f5 50%, #e2e7eb 100%);
+  height: 48px;
+  border-radius: 4px;
+  padding: 4px 6px;
+  width: 60px;
+  background-size: 400% 400%;
+  animation: pulse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+
+  @keyframes pulse {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: -135% 0%;
+    }
+  }
+
+  & + label {
+    margin-left: 5px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    & + label {
+      margin: 0 0 5px 5px;
+    }
   }
 `;
 
@@ -157,8 +212,69 @@ const RankingContainer = styled.div`
   background: #232323;
   border: 2px solid #fff;
   border-radius: 6px;
-  min-width: 500px;
-  min-height: 200px;
+  max-width: 500px;
+
+  @media only screen and (max-width: 375px) {
+    max-width: 360px;
+  }
+`;
+
+const RankingVolunteerSkeleton = styled.div`
+  display: grid;
+  align-items: center;
+  grid-template-columns: 20px 48px 1fr;
+  grid-gap: 10px;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+
+  &:not(:last-child) {
+    border-bottom: 2px solid #fff;
+  }
+
+  div {
+    &:first-of-type {
+      background: linear-gradient(
+        -90deg,
+        #f6fbff 0%,
+        #ecf1f5 50%,
+        #e2e7eb 100%
+      );
+      animation: pulse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      background-size: 400% 400%;
+    }
+
+    &:last-of-type {
+      span {
+        background: linear-gradient(
+          -90deg,
+          #f6fbff 0%,
+          #ecf1f5 50%,
+          #e2e7eb 100%
+        );
+        animation: pulse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        background-size: 400% 400%;
+        width: 200px;
+        height: 16px;
+        border-radius: 4px;
+        margin-bottom: 4px;
+
+        &:last-of-type {
+          width: 90px;
+        }
+      }
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: -135% 0%;
+    }
+  }
 `;
 
 const RankingVolunteer = styled.div`
@@ -175,8 +291,17 @@ const RankingVolunteer = styled.div`
     border-bottom: 2px solid #fff;
   }
 
-  > div {
-    margin-right: 10px;
+  div {
+    &:last-child {
+      overflow: hidden;
+      width: calc(100% - 20px);
+      white-space: nowrap;
+
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 `;
 
@@ -369,19 +494,23 @@ const Dashboard = () => {
       </header>
       <section>
         <h2>Etiquetas</h2>
-        {!!labels.length
-          ? labels.map(label => (
-              <Label key={label.id} color={labelColor[label.color]}>
-                {label.name}
-                <span>
-                  {getPointsByLabel(label.name)}
-                  {getPointsByLabel(label.name) === 1
-                    ? ' ponto'
-                    : ' pontos'}{' '}
-                </span>
-              </Label>
-            ))
-          : 'Carregando..'}
+        <LabelsContainer>
+          {!!labels.length
+            ? labels.map((label, index) => (
+                <React.Fragment key={label.id}>
+                  <Label color={labelColor[label.color]}>
+                    {label.name}
+                    <span>
+                      {getPointsByLabel(label.name)}
+                      {getPointsByLabel(label.name) === 1
+                        ? ' ponto'
+                        : ' pontos'}{' '}
+                    </span>
+                  </Label>
+                </React.Fragment>
+              ))
+            : [...Array(10)].map((_, index) => <LabelSkeleton key={index} />)}
+        </LabelsContainer>
       </section>
       {/* <section>
         <h2>Voluntários</h2>
@@ -452,7 +581,16 @@ const Dashboard = () => {
                     </Points>
                   </RankingVolunteer>
                 ))
-            : 'Carregando..'}
+            : [...Array(6)].map((_, index) => (
+                <RankingVolunteerSkeleton key={index}>
+                  <p>{index + 1}º </p>
+                  <Avatar size={48}></Avatar>
+                  <Points>
+                    <span></span>
+                    <span></span>
+                  </Points>
+                </RankingVolunteerSkeleton>
+              ))}
         </RankingContainer>
       </section>
     </Container>
