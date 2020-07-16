@@ -8,15 +8,25 @@ export default createGlobalStyle`
     outline: 0;
   }
 
-  body {
-    background: #023839;
-    color: #FFF;
-    -webkit-font-smoothing: antialiased;
+  html {
+    width: 100%;
+    min-height: 100%;
   }
 
-  body, input, button {
+  body {
+    background-image: linear-gradient(
+      to right bottom,
+      #01afb2,
+      #00adbe,
+      #00aac8,
+      #00a6d1,
+      #1ca2d7
+    );
+    color: #fff;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
   }
 
   h1, h2, h3, h4, h5, h6, strong {
@@ -27,12 +37,6 @@ export default createGlobalStyle`
     font-family: 'Bangers', sans-serif;
     font-weight: 400;
     letter-spacing: 1px;
-  }
-
-  header {
-    font-family: 'Bangers', sans-serif;
-    font-weight: 400;
-    font-size: 2.5vw;
   }
 
   button {
