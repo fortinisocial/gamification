@@ -490,7 +490,7 @@ const Dashboard = () => {
   return (
     <Container>
       <header>
-        <h1>Novos Negócios e Captação de Recursos</h1>
+        <h1>Novos Negócios e Mobilização de Recursos</h1>
       </header>
       <section>
         <h2>Etiquetas</h2>
