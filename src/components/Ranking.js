@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import coroa from '../assets/coroa.png';
+import hexagonPoint from '../assets/hexagon-point-blue.png';
 
 const RankingContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background: #232323;
-  border: 2px solid #fff;
-  border-radius: 6px;
   max-width: 500px;
+  margin-bottom: 32px;
 
   @media only screen and (max-width: 375px) {
     max-width: 360px;
@@ -18,15 +17,22 @@ const RankingContainer = styled.div`
 const RankingVolunteerSkeleton = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 20px 48px 1fr;
+  grid-template-columns: 25px 48px 1fr;
   grid-gap: 10px;
   padding: 20px;
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  background: #fff;
+  border-radius: 6px;
+  min-width: 440px;
+
+  @media only screen and (max-width: 420px) {
+    min-width: initial;
+    max-width: 360px;
+  }
 
   &:not(:last-child) {
-    border-bottom: 2px solid #fff;
+    margin-bottom: 8px;
   }
 
   div {
@@ -52,7 +58,7 @@ const RankingVolunteerSkeleton = styled.div`
         animation: pulse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         background-size: 400% 400%;
         width: 200px;
-        height: 16px;
+        height: 20px;
         border-radius: 4px;
         margin-bottom: 4px;
 
@@ -76,40 +82,50 @@ const RankingVolunteerSkeleton = styled.div`
 const RankingVolunteer = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 20px 48px 1fr;
+  grid-template-columns: 25px 48px 1fr;
   grid-gap: 10px;
   padding: 20px;
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: #5a5a5a;
+  /* background: #e2f8ff; */
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
 
   &:not(:last-child) {
-    border-bottom: 2px solid #fff;
+    margin-bottom: 8px;
   }
 
-  div {
+  > div {
     &:last-child {
       overflow: hidden;
       width: calc(100% - 20px);
       white-space: nowrap;
 
       span {
-        overflow: hidden;
-        text-overflow: ellipsis;
+        &:first-child {
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
     }
   }
 `;
 
-const Points = styled.div`
+const Volunteer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+const Points = styled.div`
+  display: flex;
+  align-items: center;
 
   span {
-    &:last-child {
-      color: #24dadc;
-      font-size: 16px;
+    &:first-child {
+      color: #4eb9eb;
       font-weight: 400;
     }
   }
@@ -155,7 +171,8 @@ const Avatar = styled.div`
   img {
     &:first-child {
       border-radius: 50%;
-      border: 1px solid #dfe1e6;
+      /* border: 1px solid #dfe1e6; */
+      box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
       width: ${({ size }) => size}px;
       height: ${({ size }) => size}px;
     }
@@ -170,6 +187,29 @@ const Avatar = styled.div`
   }
 `;
 
+// const Point = styled.span`
+//   display: inline-block;
+//   position: relative;
+//   overflow: hidden;
+//   background: transparent;
+//   width: 18px;
+//   height: 18px;
+//   transform: rotate(-30deg) skewX(30deg) scaleY(0.866);
+//   margin-left: 5px;
+//   box-shadow: 1px 1px 10px 1px rgba(41, 220, 222, 1);
+
+//   &::before {
+//     position: absolute;
+//     right: 6.7%;
+//     bottom: 0;
+//     left: 6.7%;
+//     top: 0;
+//     transform: scaleY(1.155) skewX(-30deg) rotate(30deg);
+//     content: '';
+//     background-image: var(--bg-gradient);
+//   }
+// `;
+
 const Ranking = ({ volunteers }) => {
   return (
     <RankingContainer>
@@ -182,7 +222,7 @@ const Ranking = ({ volunteers }) => {
                 <Avatar size={48}>
                   {volunteer.avatarUrl ? (
                     <img
-                      alt={volunteer.fullName}
+                      alt={volunteer.initials}
                       title={volunteer.fullName}
                       src={volunteer.avatarUrl}
                     />
@@ -193,23 +233,32 @@ const Ranking = ({ volunteers }) => {
                   )}
                   {index === 0 && <img src={coroa} alt="coroa" />}
                 </Avatar>
-                <Points>
-                  <span>{volunteer.fullName}</span>
-                  <span>
-                    {volunteer.points}{' '}
-                    {volunteer.points === 1 ? 'ponto' : 'pontos'}
-                  </span>
-                </Points>
+                <Volunteer>
+                  <span title={volunteer.fullName}>{volunteer.fullName}</span>
+                  <Points>
+                    <span>
+                      {volunteer.points}{' '}
+                      {/* {volunteer.points === 1 ? 'ponto' : 'pontos'} */}
+                    </span>
+
+                    <img
+                      src={hexagonPoint}
+                      width={32}
+                      height={32}
+                      alt="point"
+                    />
+                  </Points>
+                </Volunteer>
               </RankingVolunteer>
             ))
         : [...Array(6)].map((_, index) => (
             <RankingVolunteerSkeleton key={index}>
               <p>{index + 1}º </p>
               <Avatar size={48}></Avatar>
-              <Points>
+              <Volunteer>
                 <span></span>
                 <span></span>
-              </Points>
+              </Volunteer>
             </RankingVolunteerSkeleton>
           ))}
     </RankingContainer>
