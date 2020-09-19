@@ -164,7 +164,7 @@ const Avatar = styled.div`
 
   strong {
     font-size: 30px;
-    color: #232323;
+    color: #5a5a5a;
     text-transform: uppercase;
   }
 
@@ -228,7 +228,7 @@ const Ranking = ({ volunteers }) => {
                     />
                   ) : (
                     <strong title={volunteer.fullName}>
-                      {volunteer.initials}
+                      {volunteer.initials.charAt(0)}
                     </strong>
                   )}
                   {index === 0 && <img src={coroa} alt="coroa" />}
