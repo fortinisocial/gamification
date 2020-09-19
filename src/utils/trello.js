@@ -17,3 +17,14 @@ export const getBoardByName = async name => {
   }
   return;
 };
+
+export const teamsRoutes = {
+  'administracao-e-financas': 'Administração e Finanças',
+  'comunicacao-e-relacionamento': 'Comunicação e Relacionamento',
+  'gente-e-gestao': 'Gente e Gestão',
+  juridico: 'Jurídico',
+  'novos-negocios-e-mobilizacao-de-recursos':
+    'Novos Negócios e Mobilização de Recursos',
+  operacoes: 'Operações',
+  'tecnologia-da-informacao': 'Tecnologia da Informação',
+};
