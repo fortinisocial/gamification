@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { teamsRoutes } from '../../utils/trello';
 
 const Container = styled.div`
   display: grid;
@@ -44,15 +45,11 @@ const Home = () => {
     <Container>
       <Options>
         <h1>Selecione o time:</h1>
-        <Link to="/administracao-e-financas">Administração e Finanças</Link>
-        <Link to="/comunicacao-e-relacionamento">
-          Comunicação e Relacionamento
-        </Link>
-        <Link to="/gente-e-gestao">Gente e Gestão</Link>
-
-        <Link to="/novos-negocios-e-mobilizacao-de-recursos">
-          Novos Negócios e Mobilização de Recursos
-        </Link>
+        {Object.keys(teamsRoutes).map(team => (
+          <Link key={team} to={`/${team}`}>
+            {teamsRoutes[team]}
+          </Link>
+        ))}
       </Options>
     </Container>
   );
