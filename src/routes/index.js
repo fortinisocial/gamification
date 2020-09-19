@@ -2,17 +2,21 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
+import { teamsRoutes } from '../utils/trello';
 
 const Routes = () => {
   return (
     <Switch>
       <Route path="/" exact component={Home} />
-      <Route
-        path="/administracao-e-financas"
-        exact
-        render={() => <Dashboard teamName={'Administração e Finanças'} />}
-      />
-      <Route
+      {Object.keys(teamsRoutes).map(team => (
+        <Route
+          key={team}
+          path={`/${team}`}
+          exact
+          render={() => <Dashboard teamName={teamsRoutes[team]} />}
+        />
+      ))}
+      {/* <Route
         path="/comunicacao-e-relacionamento"
         exact
         render={() => <Dashboard teamName={'Comunicação e Relacionamento'} />}
@@ -38,7 +42,7 @@ const Routes = () => {
         path="/tecnologia-da-informacao"
         exact
         render={() => <Dashboard teamName={'Tecnologia da Informação'} />}
-      />
+      /> */}
     </Switch>
   );
 };
