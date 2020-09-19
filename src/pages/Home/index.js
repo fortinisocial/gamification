@@ -45,7 +45,11 @@ const Home = () => {
       <Options>
         <h1>Selecione o time:</h1>
         <Link to="/administracao-e-financas">Administração e Finanças</Link>
+        <Link to="/comunicacao-e-relacionamento">
+          Comunicação e Relacionamento
+        </Link>
         <Link to="/gente-e-gestao">Gente e Gestão</Link>
+
         <Link to="/novos-negocios-e-mobilizacao-de-recursos">
           Novos Negócios e Mobilização de Recursos
         </Link>

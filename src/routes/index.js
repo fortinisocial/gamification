@@ -13,6 +13,11 @@ const Routes = () => {
         render={() => <Dashboard teamName={'Administração e Finanças'} />}
       />
       <Route
+        path="/comunicacao-e-relacionamento"
+        exact
+        render={() => <Dashboard teamName={'Comunicação e Relacionamento'} />}
+      />
+      <Route
         path="/gente-e-gestao"
         exact
         render={() => <Dashboard teamName={'Gente e Gestão'} />}
