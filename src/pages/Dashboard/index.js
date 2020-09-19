@@ -194,11 +194,61 @@ const Dashboard = ({ teamName }) => {
   }, [filterLabels, board]);
 
   const filterVolunteers = useCallback(
-    volunteers =>
-      volunteers.filter(
-        volunteer =>
-          !volunteer.fullName.match(/maiara|bruno/gim) && volunteer.confirmed,
-      ),
+    (volunteers, boardName) => {
+      if (boardName.match(/Administração/gi)) {
+        return volunteers.filter(
+          volunteer =>
+            !volunteer.fullName.match(/maiara|bruno|césar|larissa/gim) &&
+            volunteer.confirmed,
+        );
+      }
+      if (boardName.match(/Tecnologia/gi)) {
+        return volunteers.filter(
+          volunteer =>
+            volunteer.fullName.match(/isabella|bruno/gim) &&
+            volunteer.confirmed,
+        );
+      }
+      if (boardName.match(/Mobilização/gi)) {
+        return volunteers.filter(
+          volunteer =>
+            !volunteer.fullName.match(
+              /maiara|bruno|césar|larissa|nitielle|Rayssa|lucas/gim,
+            ) && volunteer.confirmed,
+        );
+      }
+      if (boardName.match(/Gente/gi)) {
+        return volunteers.filter(
+          volunteer =>
+            volunteer.fullName.match(/larissa|cleo|mariana/gim) &&
+            volunteer.confirmed,
+        );
+      }
+      if (boardName.match(/Comunicação/gi)) {
+        return volunteers.filter(
+          volunteer =>
+            volunteer.fullName.match(
+              /nitielle|getulio|cesar|paula|julia|raquel/gim,
+            ) && volunteer.confirmed,
+        );
+      }
+      if (boardName.match(/Operações/gi)) {
+        return volunteers.filter(
+          volunteer =>
+            volunteer.fullName.match(
+              /fl[aá]via|gilberto|j[ée]ssica|juan|lana|ronaldo|thais/gim,
+            ) && volunteer.confirmed,
+        );
+      }
+      if (boardName.match(/Jurídico/gi)) {
+        return volunteers.filter(
+          volunteer =>
+            volunteer.fullName.match(/lucas|rayssa/gim) && volunteer.confirmed,
+        );
+      }
+      return volunteers;
+    },
+
     [],
   );
 
@@ -211,7 +261,7 @@ const Dashboard = ({ teamName }) => {
       },
     });
 
-    const members = filterVolunteers(response.data);
+    const members = filterVolunteers(response.data, board.name);
 
     for (const member of members) {
       member.avatarUrl = member.avatarUrl ? `${member.avatarUrl}/60.png` : null;
