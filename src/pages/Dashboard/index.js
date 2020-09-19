@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import api, {
-  newBusinessAndFundRaisingTeamId,
-  params,
-} from '../../services/api';
-import coroa from '../../assets/coroa.png';
+import Ranking from '../../components/Ranking';
+import api, { params } from '../../services/api';
+import { getBoardByName } from '../../utils/trello';
 
 const Container = styled.div`
   display: flex;
@@ -13,23 +11,28 @@ const Container = styled.div`
   justify-content: center;
   padding: 48px;
 
-  @media only screen and (max-width: 420px) {
-    padding: 24px;
-  }
-
   header {
-    background: #fff;
+    /* background: #fff; */
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    height: 100px;
-    padding: 0 24px;
-    border-radius: 4px;
-    color: #444;
-    box-shadow: rgba(67, 66, 93, 0.03) 0px -2px 3px,
-      rgba(67, 66, 93, 0.09) 0px 2px 3px;
-    margin-bottom: 50px;
+    /* height: 100px; */
+    /* padding: 0 24px;
+    border-radius: 4px; */
+    color: #7a7a7a;
+    /* box-shadow: rgba(67, 66, 93, 0.03) 0px -2px 3px,
+      rgba(67, 66, 93, 0.09) 0px 2px 3px; */
+    /* margin-bottom: 50px; */
+    color: #e2f8ff;
+
+    h1 {
+      font-size: 48px;
+    }
+  }
+
+  @media only screen and (max-width: 420px) {
+    padding: 24px;
   }
 
   section {
@@ -86,13 +89,14 @@ const Label = styled.label`
   height: 48px;
   line-height: 16px;
   min-width: 40px;
-  max-width: 198px;
+  max-width: max-content;
   border-radius: 4px;
   padding: 4px 6px;
   text-shadow: 1px 0px 4px rgba(0, 0, 0, 0.3);
 
   & + label {
-    margin-left: 5px;
+    /* margin-left: 5px; */
+    margin: 0 0 5px 5px;
   }
 
   @media only screen and (max-width: 768px) {
@@ -104,7 +108,7 @@ const Label = styled.label`
   span {
     width: auto;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 400;
     color: #232323;
     line-height: 22px;
     text-shadow: none;
@@ -146,183 +150,16 @@ const AvatarContainer = styled.div`
   justify-content: center;
 `;
 
-const Avatar = styled.div`
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
-  background: #dfe1e6;
-  border-radius: 50%;
-  cursor: default;
-
-  & + div {
-    margin-left: 10px;
-  }
-
-  span {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #24dadc;
-    font-weight: 600;
-    color: #232323;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    bottom: 0;
-    right: 0;
-    font-size: 12px;
-  }
-
-  strong {
-    font-size: 30px;
-    color: #232323;
-    text-transform: uppercase;
-  }
-
-  img {
-    &:first-child {
-      border-radius: 50%;
-      border: 1px solid #dfe1e6;
-      width: ${({ size }) => size}px;
-      height: ${({ size }) => size}px;
-    }
-
-    &:nth-child(2) {
-      position: absolute;
-      width: ${({ size }) => size - 8}px;
-      top: -14px;
-      right: -5px;
-      transform: rotate(18deg);
-    }
-  }
-`;
-
 const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const RankingContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: #232323;
-  border: 2px solid #fff;
-  border-radius: 6px;
-  max-width: 500px;
-
-  @media only screen and (max-width: 375px) {
-    max-width: 360px;
-  }
-`;
-
-const RankingVolunteerSkeleton = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 20px 48px 1fr;
-  grid-gap: 10px;
-  padding: 20px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-
-  &:not(:last-child) {
-    border-bottom: 2px solid #fff;
-  }
-
-  div {
-    &:first-of-type {
-      background: linear-gradient(
-        -90deg,
-        #f6fbff 0%,
-        #ecf1f5 50%,
-        #e2e7eb 100%
-      );
-      animation: pulse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      background-size: 400% 400%;
-    }
-
-    &:last-of-type {
-      span {
-        background: linear-gradient(
-          -90deg,
-          #f6fbff 0%,
-          #ecf1f5 50%,
-          #e2e7eb 100%
-        );
-        animation: pulse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        background-size: 400% 400%;
-        width: 200px;
-        height: 16px;
-        border-radius: 4px;
-        margin-bottom: 4px;
-
-        &:last-of-type {
-          width: 90px;
-        }
-      }
-    }
-  }
-
-  @keyframes pulse {
-    0% {
-      background-position: 0% 0%;
-    }
-    100% {
-      background-position: -135% 0%;
-    }
-  }
-`;
-
-const RankingVolunteer = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 20px 48px 1fr;
-  grid-gap: 10px;
-  padding: 20px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-
-  &:not(:last-child) {
-    border-bottom: 2px solid #fff;
-  }
-
-  div {
-    &:last-child {
-      overflow: hidden;
-      width: calc(100% - 20px);
-      white-space: nowrap;
-
-      span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-  }
-`;
-
-const Points = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  span {
-    &:last-child {
-      color: #24dadc;
-      font-size: 16px;
-      font-weight: 400;
-    }
-  }
-`;
-
-const Dashboard = () => {
+const Dashboard = ({ teamName }) => {
   const [volunteers, setVolunteers] = useState([]);
   const [labels, setLabels] = useState([]);
   const [cards, setCards] = useState([]);
+  const [board, setBoard] = useState();
 
   const labelColor = {
     blue: '#0079BF',
@@ -341,51 +178,47 @@ const Dashboard = () => {
     labels =>
       labels.filter(label =>
         label.name.match(
-          /^g-suite$|^slack$|^trello$|^meta$|^projeto$|^pex(.*?)ambev$|^tarefa$|^curso$|^palestra(.*?)aula$|^webinar(.*?)live$/gim,
+          /^g-suite$|^slack$|^trello$|^meta$|^projeto$|^pex(.*?)ambev$|^tarefa$|^curso$|^palestra(.*?)aula$|^webinar(.*?)live$|^palestrar(.*?)talks$|^presença(.*?)talks$|^presença(.*?)workshops$|^presença(.*?)reuniões$/gim,
         ),
       ),
     [],
   );
 
   const getLabels = useCallback(async () => {
-    const response = await api.get(
-      `/1/boards/${newBusinessAndFundRaisingTeamId}/labels`,
-      { params },
-    );
+    if (!board?.id) return;
+    const response = await api.get(`/1/boards/${board.id}/labels`, { params });
 
     const filteredLabels = filterLabels(response.data);
 
     return filteredLabels;
-  }, [filterLabels]);
+  }, [filterLabels, board]);
 
   const filterVolunteers = useCallback(
     volunteers =>
       volunteers.filter(
-        volunteer => !volunteer.fullName.match(/maiara|bruno/gim),
+        volunteer =>
+          !volunteer.fullName.match(/maiara|bruno/gim) && volunteer.confirmed,
       ),
     [],
   );
 
   const getVolunteers = useCallback(async () => {
-    const response = await api.get(
-      `/1/boards/${newBusinessAndFundRaisingTeamId}/members`,
-      { params },
-    );
+    if (!board?.id) return;
+    const response = await api.get(`/1/boards/${board.id}/members`, {
+      params: {
+        ...params,
+        fields: 'fullName,avatarUrl,confirmed,initials',
+      },
+    });
 
     const members = filterVolunteers(response.data);
 
     for (const member of members) {
-      const response = await api.get(`/1/members/${member.id}/avatarUrl`, {
-        params,
-      });
-      const avatarUrl = response.data?._value
-        ? `${response.data?._value}/60.png`
-        : null;
-      member.avatarUrl = avatarUrl;
+      member.avatarUrl = member.avatarUrl ? `${member.avatarUrl}/60.png` : null;
     }
 
     return members;
-  }, [filterVolunteers]);
+  }, [filterVolunteers, board]);
 
   const getPointsByLabel = useCallback(label => {
     if (label.match(/^g-suite$/gim)) return 10;
@@ -398,6 +231,10 @@ const Dashboard = () => {
     if (label.match(/^curso$/gim)) return 10;
     if (label.match(/^palestra(.*?)aula$/gim)) return 5;
     if (label.match(/^webinar(.*?)live$/gim)) return 2;
+    if (label.match(/^palestrar(.*?)talks$/gim)) return 10;
+    if (label.match(/^presença(.*?)talks$/gim)) return 5;
+    if (label.match(/^presença(.*?)workshops$/gim)) return 5;
+    if (label.match(/^presença(.*?)reuniões$/gim)) return 2;
     return 0;
   }, []);
 
@@ -408,6 +245,7 @@ const Dashboard = () => {
 
       let membersId = [];
       let labelsId = [];
+
       for (const card of cards) {
         labelsId = [...labelsId, card.idLabels].flat(Infinity);
         membersId = [...membersId, card.idMembers].flat(Infinity);
@@ -468,8 +306,8 @@ const Dashboard = () => {
   );
 
   const getCompletedCards = useCallback(async () => {
-    const response = await api.get('1/lists/5c3615842a10d38ebdcab317/cards', {
-      params,
+    const response = await api.get(`1/lists/${board.completedList.id}/cards`, {
+      params: { ...params, fields: 'idMembers,idLabels' },
     });
 
     const completedCards = response.data;
@@ -481,37 +319,42 @@ const Dashboard = () => {
     setLabels(labelsWithCounters);
     setVolunteers(volunteersWithCounters);
     setCards(completedCards);
-  }, [getPoints]);
+  }, [board, getPoints]);
+
+  const addCompletedListToBoard = board => {
+    if (!board?.lists?.length) return;
+
+    let completedList = board.lists
+      .filter(list => list.name.match(/conclu[ií]do/i))
+      .find(list => list.name.includes('2020'));
+
+    setBoard({ ...board, completedList });
+  };
 
   useEffect(() => {
-    getCompletedCards();
-  }, [getCompletedCards]);
+    async function getBoard() {
+      try {
+        const board = await getBoardByName(teamName);
+        if (board) {
+          addCompletedListToBoard(board);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    getBoard();
+  }, [teamName]);
+
+  useEffect(() => {
+    if (board?.id && board?.completedList) getCompletedCards();
+  }, [board, getCompletedCards]);
 
   return (
     <Container>
       <header>
-        <h1>Novos Negócios e Mobilização de Recursos</h1>
+        <h1>{teamName}</h1>
       </header>
-      <section>
-        <h2>Etiquetas</h2>
-        <LabelsContainer>
-          {!!labels.length
-            ? labels.map((label, index) => (
-                <React.Fragment key={label.id}>
-                  <Label color={labelColor[label.color]}>
-                    {label.name}
-                    <span>
-                      {getPointsByLabel(label.name)}
-                      {getPointsByLabel(label.name) === 1
-                        ? ' ponto'
-                        : ' pontos'}{' '}
-                    </span>
-                  </Label>
-                </React.Fragment>
-              ))
-            : [...Array(10)].map((_, index) => <LabelSkeleton key={index} />)}
-        </LabelsContainer>
-      </section>
       {/* <section>
         <h2>Voluntários</h2>
         <AvatarContainer>
@@ -551,47 +394,27 @@ const Dashboard = () => {
       </section> */}
       <section className="ranking">
         <h2>Ranking</h2>
-        <RankingContainer>
-          {!!volunteers.length
-            ? volunteers
-                .sort((a, b) => (a.points < b.points ? 1 : -1))
-                .map((volunteer, index) => (
-                  <RankingVolunteer key={volunteer.id}>
-                    <p>{index + 1}º </p>
-                    <Avatar size={48}>
-                      {volunteer.avatarUrl ? (
-                        <img
-                          alt={volunteer.fullName}
-                          title={volunteer.fullName}
-                          src={volunteer.avatarUrl}
-                        />
-                      ) : (
-                        <strong title={volunteer.fullName}>
-                          {volunteer.fullName?.charAt(0)}
-                        </strong>
-                      )}
-                      {index === 0 && <img src={coroa} alt="coroa" />}
-                    </Avatar>
-                    <Points>
-                      <span>{volunteer.fullName}</span>
-                      <span>
-                        {volunteer.points}{' '}
-                        {volunteer.points === 1 ? 'ponto' : 'pontos'}
-                      </span>
-                    </Points>
-                  </RankingVolunteer>
-                ))
-            : [...Array(6)].map((_, index) => (
-                <RankingVolunteerSkeleton key={index}>
-                  <p>{index + 1}º </p>
-                  <Avatar size={48}></Avatar>
-                  <Points>
-                    <span></span>
-                    <span></span>
-                  </Points>
-                </RankingVolunteerSkeleton>
-              ))}
-        </RankingContainer>
+        <Ranking volunteers={volunteers} />
+      </section>
+      <section>
+        <h2>Etiquetas</h2>
+        <LabelsContainer>
+          {!!labels.length
+            ? labels.map((label, index) => (
+                <React.Fragment key={label.id}>
+                  <Label color={labelColor[label.color]}>
+                    {label.name}
+                    <span>
+                      {getPointsByLabel(label.name)}
+                      {getPointsByLabel(label.name) === 1
+                        ? ' ponto'
+                        : ' pontos'}{' '}
+                    </span>
+                  </Label>
+                </React.Fragment>
+              ))
+            : [...Array(10)].map((_, index) => <LabelSkeleton key={index} />)}
+        </LabelsContainer>
       </section>
     </Container>
   );
