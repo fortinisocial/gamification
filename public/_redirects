@@ -1,8 +1,1 @@
-# Redirects from what the browser requests to what we serve
-/              /
-/administracao-e-financas            /administracao-e-financas
-/novos-negocios-e-mobilizacao-de-recursos  /novos-negocios-e-mobilizacao-de-recursos
-/gente-e-gestao              /gente-e-gestao
-/comunicacao-e-relacionamento            /comunicacao-e-relacionamento
-/operacoes            /operacoes
-/tecnologia-da-informacao            /tecnologia-da-informacao
+/* /index.html 200
