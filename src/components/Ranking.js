@@ -92,6 +92,12 @@ const RankingVolunteer = styled.div`
   background: #fff;
   border-radius: 6px;
   box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+
+  &:hover,
+  &:active {
+    transform: scale(1.03);
+  }
 
   &:not(:last-child) {
     margin-bottom: 8px;
