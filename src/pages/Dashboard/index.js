@@ -198,7 +198,7 @@ const Dashboard = ({ teamName }) => {
       if (boardName.match(/Administração/gi)) {
         return volunteers.filter(
           volunteer =>
-            !volunteer.fullName.match(/maiara|bruno|césar|larissa/gim) &&
+            !volunteer.fullName.match(/maiara|bruno|césar|larissa|luiza/gim) &&
             volunteer.confirmed,
         );
       }
@@ -228,7 +228,7 @@ const Dashboard = ({ teamName }) => {
         return volunteers.filter(
           volunteer =>
             volunteer.fullName.match(
-              /nitielle|getulio|cesar|paula|julia|raquel/gim,
+              /nitielle|get[uú]lio|c[eé]sar|paula|j[úu]lia|raquel/gim,
             ) && volunteer.confirmed,
         );
       }
