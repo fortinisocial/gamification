@@ -8,6 +8,10 @@
 
 <img src="./preview.jpg" alt="Prévia" title="Prévia">
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b3f82f65-8afa-4a22-abf3-03d4e9ed7fed/deploy-status)](https://app.netlify.com/sites/voluntariadofortini/deploys)
+
+[Visualizar](https://voluntariadofortini.netlify.app)
+
 ### O que é?
 
 Um sistema de gamificação para o Programa de Voluntariado da Fortini Investimento Social.
