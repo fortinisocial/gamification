@@ -1,6 +1,12 @@
+
+
+<p align="center">
+  <img src="https://fortini.org.br/img/organizacao-logo-mobile.png" width="62" height="72" alt="Fortini Investimento Social" title="Fortini Investimento Social">
+</p>
+
 ## MVP de Gamificação do Programa de Voluntariado
 
-![previa](https://user-images.githubusercontent.com/28319535/87255732-c1c5e600-c463-11ea-8d14-a4b60d6adb19.png)
+<img src="./preview.jpg" alt="Prévia" title="Prévia">
 
 ### O que é?
 
@@ -8,7 +14,7 @@ Um sistema de gamificação para o Programa de Voluntariado da Fortini Investime
 
 ### Objetivo
 
-Promover a obtenção de conhecimento e de experiências valorosas e ao mesmo tempo reconhecer e premiar os voluntários.
+Promover o engajamento, estudo e experiências dos voluntários enquanto os mesmos são reconhecidos e premiados.
 
 ### Como funciona?
 
