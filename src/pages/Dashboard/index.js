@@ -376,7 +376,7 @@ const Dashboard = ({ teamName }) => {
 
     let completedList = board.lists
       .filter(list => list.name.match(/conclu[ií]do/i))
-      .find(list => list.name.includes('2021'));
+      .find(list => list.name.includes('2020'));
 
     setBoard({ ...board, completedList });
   };
