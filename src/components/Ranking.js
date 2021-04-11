@@ -8,6 +8,7 @@ const RankingContainer = styled.div`
   flex-direction: column;
   max-width: 500px;
   margin-bottom: 32px;
+  cursor: default;
 
   @media only screen and (max-width: 375px) {
     max-width: 360px;
