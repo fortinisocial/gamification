@@ -198,29 +198,31 @@ const Dashboard = ({ teamName }) => {
       if (boardName.match(/Administração/gi)) {
         return volunteers.filter(
           volunteer =>
-            !volunteer.fullName.match(/maiara|bruno|césar|larissa|luiza/gim) &&
-            volunteer.confirmed,
+            !volunteer.fullName.match(
+              /maiara|bruno|elis[aâ]ngela|larissa|cl[aá]udio|danielle/gim,
+            ) && volunteer.confirmed,
         );
       }
       if (boardName.match(/Tecnologia/gi)) {
         return volunteers.filter(
           volunteer =>
-            volunteer.fullName.match(/isabella|bruno/gim) &&
-            volunteer.confirmed,
+            volunteer.fullName.match(
+              /isabella|bruno|renato|daniele|clara/gim,
+            ) && volunteer.confirmed,
         );
       }
       if (boardName.match(/Mobilização/gi)) {
         return volunteers.filter(
           volunteer =>
             !volunteer.fullName.match(
-              /maiara|bruno|césar|larissa|nitielle|Rayssa|lucas/gim,
+              /ana|sim[oõ]es|izabella|j[uú]lia|lucas|mariana|raissa|sofia/gim,
             ) && volunteer.confirmed,
         );
       }
       if (boardName.match(/Gente/gi)) {
         return volunteers.filter(
           volunteer =>
-            volunteer.fullName.match(/larissa|cleo|mariana/gim) &&
+            volunteer.fullName.match(/bianca|fl[áa]via|mayara|[ée]rica/gim) &&
             volunteer.confirmed,
         );
       }
@@ -228,7 +230,7 @@ const Dashboard = ({ teamName }) => {
         return volunteers.filter(
           volunteer =>
             volunteer.fullName.match(
-              /nitielle|get[uú]lio|c[eé]sar|paula|j[úu]lia|raquel/gim,
+              /andr[eé]|angelo|realini|get[uú]lio|c[eé]sar|raquel|j[úu]lia|yasmin|lara|nathalia/gim,
             ) && volunteer.confirmed,
         );
       }
@@ -236,14 +238,15 @@ const Dashboard = ({ teamName }) => {
         return volunteers.filter(
           volunteer =>
             volunteer.fullName.match(
-              /fl[aá]via|gilberto|j[ée]ssica|juan|lana|ronaldo|thais/gim,
+              /cristina|fl[aá]via|gabi|gabriela|gilberto|guilherme|j[ée]ssica|juan|lana|larissa|lorena|mayra|poliana|p[aâ]mella|rithelle|ronaldo|tha[ií]s|/gim,
             ) && volunteer.confirmed,
         );
       }
       if (boardName.match(/Jurídico/gi)) {
         return volunteers.filter(
           volunteer =>
-            volunteer.fullName.match(/lucas|rayssa/gim) && volunteer.confirmed,
+            volunteer.fullName.match(/gabriela|marcella|vin[íi]cius/gim) &&
+            volunteer.confirmed,
         );
       }
       return volunteers;
@@ -322,7 +325,7 @@ const Dashboard = ({ teamName }) => {
       );
 
       for (const label of currentLabels) {
-        if (label.volunteersId && !!label.volunteersId.length) {
+        if (!!label?.volunteersId?.length) {
           label.volunteersId.forEach(voluntId => {
             label.volunteers[voluntId] = (label.volunteers[voluntId] || 0) + 1;
           });
@@ -333,7 +336,8 @@ const Dashboard = ({ teamName }) => {
           volunteer['pointsBylabel'] = {
             ...(volunteer['pointsBylabel'] || {}),
           };
-          if (label.volunteers[volunteer.id]) {
+
+          if (label?.volunteers?.[volunteer.id]) {
             volunteer.pointsBylabel[label.name.toLowerCase()] =
               getPointsByLabel(label.name) * label.volunteers[volunteer.id];
           }
@@ -355,6 +359,11 @@ const Dashboard = ({ teamName }) => {
     [getLabels, getPointsByLabel, getVolunteers],
   );
 
+  const formatName = name =>
+    name
+      .toLocaleLowerCase()
+      .replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+
   const getCompletedCards = useCallback(async () => {
     const response = await api.get(`1/lists/${board.completedList.id}/cards`, {
       params: { ...params, fields: 'idMembers,idLabels' },
@@ -366,8 +375,13 @@ const Dashboard = ({ teamName }) => {
       completedCards,
     );
 
+    const formattedVolunteers = volunteersWithCounters.map(volunteer => ({
+      ...volunteer,
+      fullName: formatName(volunteer.fullName),
+    }));
+
     setLabels(labelsWithCounters);
-    setVolunteers(volunteersWithCounters);
+    setVolunteers(formattedVolunteers);
     setCards(completedCards);
   }, [board, getPoints]);
 
@@ -376,7 +390,7 @@ const Dashboard = ({ teamName }) => {
 
     let completedList = board.lists
       .filter(list => list.name.match(/conclu[ií]do/i))
-      .find(list => list.name.includes('2020'));
+      .find(list => list.name.includes('2021'));
 
     setBoard({ ...board, completedList });
   };
