@@ -198,12 +198,13 @@ const Dashboard = ({ teamName }) => {
       if (boardName.match(/Administração/gi)) {
         return volunteers.filter(
           volunteer =>
-            !volunteer.fullName.match(
+            volunteer.fullName.match(
               /maiara|bruno|elis[aâ]ngela|larissa|cl[aá]udio|danielle/gim,
             ) && volunteer.confirmed,
         );
       }
       if (boardName.match(/Tecnologia/gi)) {
+        console.log(volunteers[0]);
         return volunteers.filter(
           volunteer =>
             volunteer.fullName.match(
@@ -214,7 +215,7 @@ const Dashboard = ({ teamName }) => {
       if (boardName.match(/Mobilização/gi)) {
         return volunteers.filter(
           volunteer =>
-            !volunteer.fullName.match(
+            volunteer.fullName.match(
               /ana|sim[oõ]es|izabella|j[uú]lia|lucas|mariana|raissa|sofia/gim,
             ) && volunteer.confirmed,
         );
@@ -365,11 +366,15 @@ const Dashboard = ({ teamName }) => {
       .replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
 
   const getCompletedCards = useCallback(async () => {
-    const response = await api.get(`1/lists/${board.completedList.id}/cards`, {
-      params: { ...params, fields: 'idMembers,idLabels' },
-    });
+    let response;
 
-    const completedCards = response.data;
+    if (board.completedList.id) {
+      response = await api.get(`1/lists/${board.completedList.id}/cards`, {
+        params: { ...params, fields: 'idMembers,idLabels' },
+      });
+    }
+
+    const completedCards = response?.data || [];
 
     const [volunteersWithCounters, labelsWithCounters] = await getPoints(
       completedCards,
@@ -392,7 +397,7 @@ const Dashboard = ({ teamName }) => {
       .filter(list => list.name.match(/conclu[ií]do/i))
       .find(list => list.name.includes('2021'));
 
-    setBoard({ ...board, completedList });
+    setBoard({ ...board, completedList: completedList || {} });
   };
 
   useEffect(() => {
